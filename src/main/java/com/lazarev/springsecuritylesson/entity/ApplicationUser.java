@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,5 +28,10 @@ public class ApplicationUser {
 
     private String email;
 
-    private String role;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = {@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name="user_fk_constraint"))},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", foreignKey = @ForeignKey(name="role_fk_constraint"))})
+    private Set<Role> roles;
 }

@@ -3,7 +3,6 @@ package com.lazarev.springsecuritylesson.config;
 import com.lazarev.springsecuritylesson.entity.ApplicationUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -15,8 +14,11 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority role = new SimpleGrantedAuthority(user.getRole());
-        return Set.of(role);
+        // 2 role , 5 authorities    (10 authority + 2 role) = 12
+        return user.getRoles()
+                .stream()
+                .map(SecurityRole::new)
+                .toList();
     }
 
     @Override
